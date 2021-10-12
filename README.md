@@ -1,6 +1,10 @@
 # batch-rename
 
-A simple command line tool to rename a bunch of files.
+With `batch-rename` you can utilize your favorite text editor to rename or move a bunch of files at once.
+It doesn't come with any features beside the core function.
+You only need to start the tool in any directory, and it will open a list of paths inside your preferred editor ready for you to edit.
+
+![Example screenshot](screenshots/example.png)
 
 When run from inside some directory, this program will:
 
