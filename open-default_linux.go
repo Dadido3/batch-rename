@@ -5,8 +5,11 @@
 
 package main
 
-import "os/exec"
+import (
+	"fmt"
+)
 
 func openWithDefault(filePath string) error {
 	// TODO: Add code to open file with default program on linux
+	return fmt.Errorf("\"open with default application\" not implemented in linux")
 }

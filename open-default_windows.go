@@ -5,7 +5,9 @@
 
 package main
 
-import "os/exec"
+import (
+	"os/exec"
+)
 
 func openWithDefault(filePath string) error {
 	cmd := exec.Command("explorer", filePath)
