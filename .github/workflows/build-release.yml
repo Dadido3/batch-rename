@@ -19,13 +19,26 @@ jobs:
 
     steps:
 
-    - uses: actions/checkout@v2
+      - name: Set up Go
+        uses: actions/setup-go@v2
+        with:
+          go-version: ^1.19
 
-    - uses: wangyoucao577/go-release-action@master
-      with:
-        github_token: ${{ secrets.GITHUB_TOKEN }}
-        goos: ${{ matrix.goos }}
-        goarch: ${{ matrix.goarch }}
-        goversion: "https://golang.org/dl/go1.17.linux-amd64.tar.gz"
-        ldflags: -X 'main.versionString=${{ github.event.release.tag_name }}'
-        extra_files: LICENSE README.md
+      - name: Check out code into the Go module directory
+        uses: actions/checkout@v2
+
+      - name: Build executable
+        run: go build -v -ldflags="-X 'main.versionString=${{ github.event.release.tag_name }}'" .
+        env:
+          GOARCH: ${{ matrix.goarch }}
+          GOOS: ${{ matrix.goos }}
+
+      - name: Create distribution archive
+        run: go run -v ./scripts/dist
+
+      - name: Upload binary to release
+        uses: svenstaro/upload-release-action@v2
+        with:
+          file: dist/dist.zip
+          asset_name: batch-rename-${{ matrix.goos }}-${{ matrix.goarch }}.zip
+          overwrite: true
