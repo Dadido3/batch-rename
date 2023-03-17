@@ -8,9 +8,9 @@ You only need to start the tool in any directory, and it will open a list of pat
 
 When run from inside some directory, this program will:
 
-1. Create a temporary file with a list of all files contained in the given directory and its sub directories
-2. Opens the temporary file with the default editor (For files with the file extension `.batch-rename`)
-3. Reads the file back, and renames/moves the files
+1. Create a temporary file with a list of all files contained in the given directory and its sub directories.
+2. Opens the temporary file with the default editor. (For files with the file extension `.batch-rename`)
+3. Reads the file back, and renames/moves the files.
 
 ## Usage
 
@@ -21,6 +21,12 @@ There are multiple ways to use this tool:
 - Use `go install github.com/Dadido3/batch-rename@latest`. Afterwards you can run `batch-rename` from inside any directory.
 - Build it yourself from source, see below.
 
+## Options
+
+- `batch-rename --no-numbers` will disable line number output.
+This means that each line contains only the file path without a preceding number, which is easier to edit in some cases.
+Using this option has the downside that any line removal or insertion can mess up the mapping between old and new paths, which can mess up your filenames.
+
 ## Building
 
 This software uses GoReleaser to automatically build and upload artifacts to GitHub.
@@ -28,4 +34,6 @@ Make sure to [install GoReleaser](https://goreleaser.com/install/).
 
 - To build for your current platform use `goreleaser build --single-target --clean`. Or `goreleaser build --single-target --snapshot --clean` if you have modified the repository.
 - To simulate the release process, use `goreleaser --skip-publish --auto-snapshot --clean`.
-- To build for your current platform and without GoReleaser, use `go build`. This will not include the version information.
+
+To build for your current platform and without GoReleaser, use `go build`.
+This will not include the version information.

@@ -1,4 +1,4 @@
-// Copyright (c) 2021-2022 David Vogel
+// Copyright (c) 2021-2023 David Vogel
 //
 // This software is released under the MIT License.
 // https://opensource.org/licenses/MIT
@@ -7,6 +7,7 @@ package main
 
 import (
 	"bufio"
+	"flag"
 	"io/fs"
 	"log"
 	"os"
@@ -15,10 +16,15 @@ import (
 	"github.com/skratchdot/open-golang/open"
 )
 
+var flagNoNumbers = flag.Bool("no-numbers", false, "If set, batch-rename will not prepend numbers to every line. If you enable this option you have to make sure that you don't add or remove lines, as otherwise it will mess up your filenames!")
+
 func main() {
+	flag.Parse()
+
 	log.Printf("Started batch-rename %v", Version)
 
 	rootDir := "."
+	numbering := !*flagNoNumbers
 
 	fileEntries := []fileEntry{}
 
@@ -51,37 +57,34 @@ func main() {
 		return
 	}
 
-	log.Printf("Got %d files to rename", len(fileEntries))
+	log.Printf("Found %d files", len(fileEntries))
 
 	// Create temporary file.
-	filePath, err := createEntriesFile(rootDir, fileEntries)
+	filePath, err := createEntriesFile(rootDir, fileEntries, numbering)
 	if err != nil {
-		log.Panicf("Failed to create temporary text file: %v", err)
+		log.Panicf("Failed to create file with filepaths: %v", err)
 	}
-
-	/*if err := openWithDefault(filePath); err != nil {
-		log.Panicf("Failed to open temporary text file: %v", err)
-	}*/
 
 	if err := open.Run(filePath); err != nil {
-		log.Panicf("Failed to open temporary text file: %v", err)
+		log.Panicf("Failed to open file with filepaths: %v", err)
 	}
 
-	log.Print("Editor opened, edit file paths and press any key to continue...")
+	log.Printf("Opening %s in the default editor", filePath)
+	log.Print("You can now edit the filepaths and press any key to continue...")
 	reader.ReadString('\n')
 
 	// Read temporary file back and rename files. Retry on fail.
 	for {
-		if err := readEntriesFile(filePath, fileEntries); err != nil {
-			log.Printf("Failed to read temporary text file: %v", err)
-			log.Print("Update the temporary text file and press any key to retry...")
+		if err := readEntriesFile(filePath, fileEntries, numbering); err != nil {
+			log.Printf("Failed to read filepaths: %v", err)
+			log.Print("Please edit your filepaths, save them and press any key to retry...")
 			reader.ReadString('\n')
 			continue
 		}
 
 		if err := moveFiles(fileEntries); err != nil {
 			log.Printf("Failed to move file: %v", err)
-			log.Print("Update the temporary file and press any key to retry...")
+			log.Print("Please edit your filepaths, save them and press any key to retry...")
 			reader.ReadString('\n')
 			continue
 		}
@@ -89,13 +92,13 @@ func main() {
 		break
 	}
 
-	log.Print("Deleting temporary file")
+	log.Print("Deleting filepaths file")
 
 	// Try to delete the temporary file. Retry on fail.
 	for {
 		if err := os.Remove(filePath); err != nil {
-			log.Printf("Failed to remove temporary text file: %v", err)
-			log.Printf("Close the temporary text file and press any key to try again...")
+			log.Printf("Failed to remove file with filepaths: %v", err)
+			log.Printf("Please close your editor and press any key to try again...")
 			reader.ReadString('\n')
 			continue
 		}
