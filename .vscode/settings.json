@@ -3,7 +3,9 @@
         "Dadido",
         "GOARCH",
         "goversion",
+        "incpatch",
         "ldflags",
+        "skratchdot",
         "svenstaro",
         "Vogel",
         "wangyoucao"

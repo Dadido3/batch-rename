@@ -1,10 +1,7 @@
 module github.com/Dadido3/batch-rename
 
-go 1.19
+go 1.20
 
-require (
-	github.com/coreos/go-semver v0.3.0
-	golang.org/x/exp v0.0.0-20221031165847-c99f073a8326
-)
+require github.com/Masterminds/semver/v3 v3.2.0
 
-require gopkg.in/yaml.v2 v2.4.0 // indirect
+require github.com/skratchdot/open-golang v0.0.0-20200116055534-eef842397966

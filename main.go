@@ -11,10 +11,12 @@ import (
 	"log"
 	"os"
 	"path/filepath"
+
+	"github.com/skratchdot/open-golang/open"
 )
 
 func main() {
-	log.Printf("Started batch-rename v%v", version)
+	log.Printf("Started batch-rename %v", Version)
 
 	rootDir := "."
 
@@ -57,7 +59,11 @@ func main() {
 		log.Panicf("Failed to create temporary text file: %v", err)
 	}
 
-	if err := openWithDefault(filePath); err != nil {
+	/*if err := openWithDefault(filePath); err != nil {
+		log.Panicf("Failed to open temporary text file: %v", err)
+	}*/
+
+	if err := open.Run(filePath); err != nil {
 		log.Panicf("Failed to open temporary text file: %v", err)
 	}
 
