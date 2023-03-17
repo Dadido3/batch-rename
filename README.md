@@ -18,7 +18,7 @@ There are multiple ways to use this tool:
 
 - Download the compiled binary, then move and execute it into the directory you want to rename files in.
 - Download the compiled binary, and move it to any directory that is in your `path` environment variable. Afterwards you can run `batch-rename` from inside any directory.
-- Use `go install github.com/Dadido3/batch-rename`. Afterwards you can run `batch-rename` from inside any directory.
+- Use `go install github.com/Dadido3/batch-rename@latest`. Afterwards you can run `batch-rename` from inside any directory.
 - Build it yourself from source, see below.
 
 ## Building

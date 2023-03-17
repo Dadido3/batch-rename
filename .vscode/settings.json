@@ -2,6 +2,7 @@
     "cSpell.words": [
         "Dadido",
         "GOARCH",
+        "goreleaser",
         "goversion",
         "incpatch",
         "ldflags",
