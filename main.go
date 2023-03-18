@@ -12,11 +12,13 @@ import (
 	"log"
 	"os"
 	"path/filepath"
+	"regexp"
 
 	"github.com/skratchdot/open-golang/open"
 )
 
 var flagNoNumbers = flag.Bool("no-numbers", false, "If set, batch-rename will not prepend numbers to every line. If you enable this option you have to make sure that you don't add or remove lines, as otherwise it will mess up your filenames!")
+var flagFilterRegex = flag.String("regex", "", "Filters entries with the specified regular expression by their filepath relative to the working directory. Example: batch-rename --regex \"\\.png$|\\.jpg$\", which will only include png and jpg files.")
 
 func main() {
 	flag.Parse()
@@ -25,6 +27,15 @@ func main() {
 
 	rootDir := "."
 	numbering := !*flagNoNumbers
+
+	var filterRegex *regexp.Regexp
+	if *flagFilterRegex != "" {
+		var err error
+		if filterRegex, err = regexp.Compile(*flagFilterRegex); err != nil {
+			log.Printf("Invalid regular expression: %v", err)
+			return
+		}
+	}
 
 	fileEntries := []fileEntry{}
 
@@ -35,6 +46,11 @@ func main() {
 
 		switch d.IsDir() {
 		case false:
+
+			if filterRegex != nil && !filterRegex.Match([]byte(path)) {
+				return nil
+			}
+
 			fileEntries = append(fileEntries, fileEntry{
 				name:         d.Name(),
 				originalPath: path,

@@ -24,8 +24,9 @@ There are multiple ways to use this tool:
 ## Options
 
 - `batch-rename --no-numbers` will disable line number output.
-This means that each line contains only the file path without a preceding number, which is easier to edit in some cases.
+This means that each line contains only the file path without a preceding number, which can help if you need to search and replace numbers in filenames.
 Using this option has the downside that any line removal or insertion can mess up the mapping between old and new paths, which can mess up your filenames.
+- `batch-rename --regex "\.png$|\.jpg$"` will only include files that match with the regular expression `\.png\$|\.jpg\$`. In this example only files ending in `.png` or `.jpg` are included.
 
 ## Building
 
@@ -36,4 +37,4 @@ Make sure to [install GoReleaser](https://goreleaser.com/install/).
 - To simulate the release process, use `goreleaser --skip-publish --auto-snapshot --clean`.
 
 To build for your current platform and without GoReleaser, use `go build`.
-This will not include the version information.
+This will result in the same executable, but without correct version information.
