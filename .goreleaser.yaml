@@ -35,7 +35,7 @@ checksum:
 snapshot:
   name_template: "{{ incpatch .Version }}-dev+{{ .ShortCommit }}"
 release:
-  name_template: "{{.ProjectName}} {{.Version}}
+  name_template: "{{.ProjectName}} {{.Version}}"
 changelog:
   sort: asc
   filters:
